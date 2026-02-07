@@ -1,0 +1,34 @@
+# ======================
+# Android / Gradle
+# ======================
+.gradle/
+build/
+*/build/
+
+local.properties
+.cxx/
+.externalNativeBuild/
+
+# ======================
+# IDE (Android Studio / IntelliJ)
+# ======================
+.idea/
+*.iml
+
+# ======================
+# OS
+# ======================
+.DS_Store
+
+# ======================
+# Logs & Artifacts
+# ======================
+*.log
+*.apk
+*.aab
+*.hprof
+
+# ======================
+# Misc
+# ======================
+captures/
