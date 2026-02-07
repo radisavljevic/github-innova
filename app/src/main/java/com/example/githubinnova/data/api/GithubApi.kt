@@ -1,5 +1,8 @@
 package com.example.githubinnova.data.api
 
+import com.example.githubinnova.data.model.RepoDto
+import com.example.githubinnova.data.model.TagDto
+import com.example.githubinnova.data.model.UserDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 
