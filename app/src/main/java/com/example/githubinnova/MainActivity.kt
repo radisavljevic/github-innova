@@ -4,19 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.githubinnova.feature.repo_details.RepoDetailsScreen
 import com.example.githubinnova.feature.repos.ReposScreen
-import com.example.githubinnova.feature.repos.ReposViewModel
+import com.example.githubinnova.navigation.Screen
 import com.example.githubinnova.ui.theme.GithubInnovaTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.getValue
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,8 +22,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+
             GithubInnovaTheme {
-                ReposScreen()
+                NavHost(navController = navController, startDestination = Screen.Repos.route) {
+                    composable(Screen.Repos.route) {
+                        ReposScreen(
+                            onRepoClick = { repo ->
+                                navController.navigate(
+                                    Screen.RepoDetails.createRoute(
+                                        repo.name ?: ""
+                                    )
+                                )
+                            }
+                        )
+                    }
+
+                    composable(
+                        route = Screen.RepoDetails.route,
+                        arguments = listOf(navArgument("repoName") { type = NavType.StringType })
+                    ) { backStackEntry ->
+                        val repoName = backStackEntry.arguments?.getString("repoName") ?: ""
+                        RepoDetailsScreen(repoName = repoName)
+                    }
+                }
             }
         }
     }

@@ -19,24 +19,36 @@ import androidx.compose.ui.Alignment
 
 @Composable
 fun ReposScreen(
-    viewModel: ReposViewModel = hiltViewModel()
+    viewModel: ReposViewModel = hiltViewModel(),
+    onRepoClick: (Repo) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(WindowInsets.statusBars.asPaddingValues())
     ) {
         when (state) {
-            is UiState.Loading -> CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
-            )
+            is UiState.Loading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
 
-            is UiState.Success<List<Repo>> -> RepoList(
-                (state as UiState.Success<List<Repo>>).data
-            )
+            is UiState.Success<List<Repo>> -> {
+                RepoList(
+                    repos = (state as UiState.Success<List<Repo>>).data,
+                    onRepoClick = onRepoClick
+                )
+            }
 
-            is UiState.Error -> Text((state as UiState.Error).message)
+            is UiState.Error -> {
+                Text(
+                    text = (state as UiState.Error).message,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
         }
     }
 }
