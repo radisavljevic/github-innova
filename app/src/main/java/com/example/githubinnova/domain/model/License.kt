@@ -1,9 +1,9 @@
 package com.example.githubinnova.domain.model
 
 data class License(
-    val key: String,
-    val name: String,
-    val spdxId: String,
-    val url: String?,
-    val nodeId: String
+    val key: String? = null,
+    val name: String? = null,
+    val spdxId: String? = null,
+    val url: String? = null,
+    val nodeId: String? = null
 )

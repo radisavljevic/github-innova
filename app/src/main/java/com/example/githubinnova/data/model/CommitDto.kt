@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CommitDto(
-    @SerialName("sha") val sha: String,
-    @SerialName("url") val url: String
+    @SerialName("sha") val sha: String? = null,
+    @SerialName("url") val url: String? = null
 )

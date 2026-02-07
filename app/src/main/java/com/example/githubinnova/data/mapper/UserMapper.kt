@@ -3,7 +3,7 @@ package com.example.githubinnova.data.mapper
 import com.example.githubinnova.data.model.UserDto
 import com.example.githubinnova.domain.model.User
 
-fun UserDto.toDomain(): User {
+fun UserDto.toDomainOrNull(): User? {
     return User(
         login = login,
         id = id,
@@ -15,8 +15,8 @@ fun UserDto.toDomain(): User {
         email = email,
         bio = bio,
         twitterUsername = twitterUsername,
-        publicRepos = publicRepos,
-        followers = followers,
-        following = following
+        publicRepos = publicRepos ?: 0,
+        followers = followers ?: 0,
+        following = following ?: 0
     )
 }

@@ -9,7 +9,7 @@ class ErrorHandler @Inject constructor() {
         return when (throwable) {
             is IOException -> "Network error"
             is HttpException -> "Server error ${throwable.code()}"
-            else -> "Unknown error"
+            else -> throwable.localizedMessage ?: "Unknown error"
         }
     }
 }

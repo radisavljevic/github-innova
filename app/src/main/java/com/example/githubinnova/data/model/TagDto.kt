@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TagDto(
-    @SerialName("name") val name: String,
-    @SerialName("zipball_url") val zipballUrl: String,
-    @SerialName("tarball_url") val tarballUrl: String,
-    @SerialName("commit") val commit: CommitDto,
-    @SerialName("node_id") val nodeId: String
+    @SerialName("name") val name: String? = null,
+    @SerialName("zipball_url") val zipballUrl: String? = null,
+    @SerialName("tarball_url") val tarballUrl: String? = null,
+    @SerialName("commit") val commit: CommitDto? = null,
+    @SerialName("node_id") val nodeId: String? = null
 )

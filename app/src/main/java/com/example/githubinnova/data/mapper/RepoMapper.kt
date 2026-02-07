@@ -9,15 +9,16 @@ fun RepoDto.toDomain(): Repo {
         name = name,
         fullName = fullName,
         private = private,
-        owner = owner.toDomain(),   // map UserDto -> User
+        owner = owner?.toDomainOrNull(),
         htmlUrl = htmlUrl,
         description = description,
         fork = fork,
-        stargazersCount = stargazersCount,
-        watchersCount = watchersCount,
+        stargazersCount = stargazersCount ?: 0,
+        watchersCount = watchersCount ?: 0,
         language = language,
-        forksCount = forksCount,
-        openIssuesCount = openIssuesCount,
-        defaultBranch = defaultBranch
+        forksCount = forksCount ?: 0,
+        openIssuesCount = openIssuesCount ?: 0,
+        defaultBranch = defaultBranch ?: "",
+        license = license?.toDomainOrNull(),
     )
 }
