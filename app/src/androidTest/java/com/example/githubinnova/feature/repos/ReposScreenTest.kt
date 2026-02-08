@@ -1,7 +1,8 @@
-package com.example.githubinnova.feature.repo_details
+package com.example.githubinnova.feature.repos
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.githubinnova.EmptyContentTestActivity
@@ -14,7 +15,7 @@ import org.junit.runner.RunWith
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
-class RepoDetailsScreenTest {
+class ReposScreenTest {
 
     @get:Rule(order = 0)
     val hiltRule = HiltAndroidRule(this)
@@ -28,16 +29,19 @@ class RepoDetailsScreenTest {
     }
 
     @Test
-    fun repoDetailsScreen_displaysRepoAndTags() {
+    fun reposScreen_displaysSearchBarAndLoadedRepoList() {
         composeRule.setContent {
-            RepoDetailsScreen(
-                userName = "octocat",
-                repoName = "TestRepo"
-            )
+            ReposScreen(onRepoClick = {})
+        }
+
+        composeRule.onNodeWithText("Search repos by user name").assertIsDisplayed()
+
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithText("TestRepo").fetchSemanticsNodes().isNotEmpty()
         }
 
         composeRule.onNodeWithText("TestRepo").assertIsDisplayed()
-        composeRule.onNodeWithText("The Octocat").assertIsDisplayed()
-        composeRule.onNodeWithText("v1.0").assertIsDisplayed()
+        composeRule.onNodeWithText("This is a test repository").assertIsDisplayed()
+        composeRule.onNodeWithText("Open issues: 2").assertIsDisplayed()
     }
 }
