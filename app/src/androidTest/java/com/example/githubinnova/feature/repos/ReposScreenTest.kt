@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.text.input.ImeAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.githubinnova.EmptyContentTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -42,7 +41,7 @@ class ReposScreenTest {
         composeRule.onNodeWithText("Enter a GitHub username above to see their repositories").assertIsDisplayed()
 
         composeRule.onNodeWithTag("search_field").performTextInput("octocat")
-        composeRule.onNodeWithTag("search_field").performImeAction(ImeAction.Search)
+        composeRule.onNodeWithTag("search_field").performImeAction()
 
         composeRule.waitUntil(timeoutMillis = 5_000) {
             composeRule.onAllNodesWithText("TestRepo").fetchSemanticsNodes().isNotEmpty()
