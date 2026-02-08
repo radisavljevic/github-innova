@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,9 +10,22 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+
+val localProps = Properties()
+val localPropsFile = rootProject.file("local.properties")
+
+if (localPropsFile.exists()) {
+    localProps.load(FileInputStream(localPropsFile))
+}
+val githubToken: String = localProps.getProperty("GITHUB_TOKEN") ?: ""
+
 android {
     namespace = "com.example.githubinnova"
     compileSdk = 36
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.example.githubinnova"
@@ -18,6 +34,11 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField(
+            "String",
+            "GITHUB_TOKEN",
+            "\"$githubToken\""
+        )
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

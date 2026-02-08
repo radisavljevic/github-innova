@@ -18,15 +18,15 @@ fun RepoList(
     repos: List<Repo>,
     onRepoClick: (Repo) -> Unit = {}
 ) {
-    val bottomPadding: Dp = with(LocalDensity.current) {
-        WindowInsets.navigationBars.getBottom(this).toDp()
-    }
+//    val bottomPadding: Dp = with(LocalDensity.current) {
+//        WindowInsets.navigationBars.getBottom(this).toDp()
+//    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
             top = 8.dp,
-            bottom = bottomPadding + 8.dp
+            bottom = 16.dp
         )
     ) {
         items(

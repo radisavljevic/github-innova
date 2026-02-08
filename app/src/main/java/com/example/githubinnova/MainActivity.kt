@@ -2,6 +2,7 @@ package com.example.githubinnova
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.NavType
@@ -31,7 +32,8 @@ class MainActivity : ComponentActivity() {
                             onRepoClick = { repo ->
                                 navController.navigate(
                                     Screen.RepoDetails.createRoute(
-                                        repo.name ?: ""
+                                        username = repo.owner?.login ?: "",
+                                        repoName = repo.name ?: ""
                                     )
                                 )
                             }
@@ -40,10 +42,14 @@ class MainActivity : ComponentActivity() {
 
                     composable(
                         route = Screen.RepoDetails.route,
-                        arguments = listOf(navArgument("repoName") { type = NavType.StringType })
+                        arguments = listOf(
+                            navArgument("username") { type = NavType.StringType },
+                            navArgument("repoName") { type = NavType.StringType }
+                        )
                     ) { backStackEntry ->
+                        val username = backStackEntry.arguments?.getString("username") ?: ""
                         val repoName = backStackEntry.arguments?.getString("repoName") ?: ""
-                        RepoDetailsScreen(repoName = repoName)
+                        RepoDetailsScreen(userName = username, repoName = repoName)
                     }
                 }
             }

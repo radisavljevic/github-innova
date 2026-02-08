@@ -22,17 +22,18 @@ class RepoDetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow<UiState<Pair<Repo, List<Tag>>>>(UiState.Loading)
     val state = _state.asStateFlow()
 
-    fun loadDetails(repoName: String) = viewModelScope.launch {
+    fun loadDetails(userName: String, repoName: String) = viewModelScope.launch {
         _state.value = UiState.Loading
 
-        val repoResult = repository.getRepoDetails(repoName)
-        val tagsResult = repository.getRepoTags(repoName)
+        val repoResult = repository.getRepoDetails(userName, repoName)
+        val tagsResult = repository.getRepoTags(userName, repoName)
 
         if (repoResult.isSuccess && tagsResult.isSuccess) {
             _state.value = UiState.Success(repoResult.getOrNull()!! to tagsResult.getOrNull()!!)
         } else {
             val exception = repoResult.exceptionOrNull() ?: tagsResult.exceptionOrNull()
-            _state.value = UiState.Error(errorHandler.handle(exception ?: Exception("Unknown error")))
+            _state.value =
+                UiState.Error(errorHandler.handle(exception ?: Exception("Unknown error")))
         }
     }
 }

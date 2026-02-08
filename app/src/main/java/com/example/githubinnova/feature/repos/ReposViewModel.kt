@@ -22,13 +22,28 @@ class ReposViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        loadRepos()
+        loadRepos("octocat")
     }
 
-    private fun loadRepos() = viewModelScope.launch {
+    fun searchRepos(username: String) {
+        //if (username.isBlank()) return
+
+        viewModelScope.launch {
+            _state.value = UiState.Loading
+
+            val result = repository.getUserRepos(username)
+
+            _state.value = result.fold(
+                onSuccess = { UiState.Success(it) },
+                onFailure = { UiState.Error(errorHandler.handle(it)) }
+            )
+        }
+    }
+
+    private fun loadRepos(name: String) = viewModelScope.launch {
         _state.value = UiState.Loading
 
-        repository.getUserRepos()
+        repository.getUserRepos(name)
             .onSuccess {
                 _state.value = UiState.Success(it)
             }

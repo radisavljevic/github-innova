@@ -37,12 +37,13 @@ import com.example.githubinnova.domain.model.Tag
 @Composable
 fun RepoDetailsScreen(
     viewModel: RepoDetailsViewModel = hiltViewModel(),
+    userName: String,
     repoName: String
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(repoName) {
-        viewModel.loadDetails(repoName)
+        viewModel.loadDetails(userName, repoName)
     }
 
     when (state) {

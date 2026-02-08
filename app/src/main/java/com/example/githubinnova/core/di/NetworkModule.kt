@@ -1,8 +1,6 @@
 package com.example.githubinnova.core.di
 
 import com.example.githubinnova.data.api.GithubApi
-import com.example.githubinnova.data.repository.GithubRepositoryImpl
-import com.example.githubinnova.domain.repository.GithubRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

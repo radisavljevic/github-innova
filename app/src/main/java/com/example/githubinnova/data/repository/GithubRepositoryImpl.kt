@@ -1,39 +1,40 @@
 package com.example.githubinnova.data.repository
 
-import com.example.githubinnova.core.network.ErrorHandler
 import com.example.githubinnova.data.api.GithubApi
 import com.example.githubinnova.data.mapper.toDomain
 import com.example.githubinnova.data.mapper.toDomainOrNull
-import com.example.githubinnova.data.model.UserDto
 import com.example.githubinnova.domain.model.Repo
 import com.example.githubinnova.domain.model.User
 import com.example.githubinnova.domain.repository.GithubRepository
 import com.example.githubinnova.domain.model.Tag
 import javax.inject.Inject
+import com.example.githubinnova.BuildConfig
 
 
 class GithubRepositoryImpl @Inject constructor(
     private val api: GithubApi
 ) : GithubRepository {
 
-    override suspend fun getUser(): Result<User> =
+    private val token = BuildConfig.GITHUB_TOKEN
+
+    override suspend fun getUser(name: String): Result<User> =
         runCatching {
-            api.getUser("octocat")?.toDomainOrNull() ?: User()
+            api.getUser(token, name).toDomainOrNull() ?: User()
         }
 
-    override suspend fun getUserRepos(): Result<List<Repo>> =
+    override suspend fun getUserRepos(name: String): Result<List<Repo>> =
         runCatching {
-            api.getRepos("octocat").map { it.toDomain() }
+            api.getRepos(token, name).map { it.toDomain() }
         }
 
-    override suspend fun getRepoDetails(repo: String): Result<Repo> =
+    override suspend fun getRepoDetails(userName: String, repo: String): Result<Repo> =
         runCatching {
-            api.getRepoDetails("octocat", repo).toDomain()
+            api.getRepoDetails(token, userName, repo).toDomain()
         }
 
-    override suspend fun getRepoTags(repo: String): Result<List<Tag>> =
+    override suspend fun getRepoTags(userName: String, repo: String): Result<List<Tag>> =
         runCatching {
-            api.getRepoTags("octocat", repo).map { it.toDomainOrNull() ?: Tag() }
+            api.getRepoTags(token, userName, repo).map { it.toDomainOrNull() ?: Tag() }
         }
 }
 
