@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ReposViewModel @Inject constructor(
     private val repository: GithubRepository,
-    private val errorHandler: ErrorHandler
+    private val errorHandler: ErrorHandler,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<UiState<List<Repo>>>(UiState.Loading)

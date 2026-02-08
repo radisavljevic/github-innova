@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.githubinnova.core.network.ErrorHandler
 import com.example.githubinnova.core.ui.UiState
-import com.example.githubinnova.domain.model.Repo
 import com.example.githubinnova.domain.model.RepoDetails
-import com.example.githubinnova.domain.model.Tag
 import com.example.githubinnova.domain.repository.GithubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -10,7 +10,6 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
-
 val localProps = Properties()
 val localPropsFile = rootProject.file("local.properties")
 
@@ -22,10 +21,6 @@ val githubToken: String = localProps.getProperty("GITHUB_TOKEN") ?: ""
 android {
     namespace = "com.example.githubinnova"
     compileSdk = 36
-
-    buildFeatures {
-        buildConfig = true
-    }
 
     defaultConfig {
         applicationId = "com.example.githubinnova"
@@ -39,7 +34,8 @@ android {
             "GITHUB_TOKEN",
             "\"$githubToken\""
         )
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.githubinnova.HiltTestRunner"
     }
 
     buildTypes {
@@ -59,6 +55,7 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -82,6 +79,7 @@ dependencies {
 
     implementation(libs.hilt.android)
     implementation(libs.transport.runtime)
+    implementation(libs.androidx.runner)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.okhttp)
@@ -90,10 +88,17 @@ dependencies {
     implementation(libs.coil.svg)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
+
+    androidTestImplementation(libs.androidx.core)
+    androidTestImplementation(libs.androidx.runner)
 }
