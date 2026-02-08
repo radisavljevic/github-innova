@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.example.githubinnova.ui.theme.Spacing
 
 @Composable
 fun SearchBar(
@@ -34,7 +35,7 @@ fun SearchBar(
         onValueChange = onTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = Spacing.screenHorizontal, vertical = 12.dp)
             .testTag("search_field"),
         placeholder = { Text("Search by GitHub username") },
         singleLine = true,

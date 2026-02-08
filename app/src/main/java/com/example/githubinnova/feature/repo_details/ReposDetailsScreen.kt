@@ -2,9 +2,10 @@ package com.example.githubinnova.feature.repo_details
 
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.githubinnova.core.ui.UiState
+import com.example.githubinnova.ui.theme.Spacing
 import com.example.githubinnova.domain.model.RepoDetails
 
 @Composable
@@ -59,10 +60,14 @@ fun RepoDetailsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(WindowInsets.systemBars.asPaddingValues()),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                contentPadding = PaddingValues(
+                    horizontal = Spacing.screenHorizontal,
+                    vertical = Spacing.screenVertical
+                ),
+                verticalArrangement = Arrangement.spacedBy(Spacing.listItemSpacing)
             ) {
                 item { RepoHeader(repo) }
-                items(tags, key = { it.commit?.sha ?: it.name.orEmpty() }) { tag ->
+                itemsIndexed(tags, key = { index, _ -> index }) { _, tag ->
                     TagItem(tag)
                 }
             }
