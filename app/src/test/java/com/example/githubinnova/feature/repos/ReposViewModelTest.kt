@@ -39,27 +39,16 @@ class ReposViewModelTest {
     }
 
     @Test
-    fun initialLoadSuccess_updatesStateWithRepoList() = runTest {
-        fakeRepo.shouldReturnError = false
+    fun initialState_isIdle() = runTest {
         viewModel = ReposViewModel(repository = fakeRepo, errorHandler = errorHandler)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        val state = viewModel.state.value
-        Assert.assertTrue(state is UiState.Success)
-        val data = (state as UiState.Success<List<Repo>>).data
-        Assert.assertEquals(1, data.size)
-        Assert.assertEquals("TestRepo", data.first().name)
+        Assert.assertTrue(viewModel.state.value is UiState.Idle)
     }
 
     @Test
-    fun initialLoadFailure_updatesStateWithError() = runTest {
-        fakeRepo.shouldReturnError = true
+    fun searchRepos_withBlankUsername_setsStateToIdle() = runTest {
         viewModel = ReposViewModel(repository = fakeRepo, errorHandler = errorHandler)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        val state = viewModel.state.value
-        Assert.assertTrue(state is UiState.Error)
-        Assert.assertEquals("Failed", (state as UiState.Error).message)
+        viewModel.searchRepos("")
+        Assert.assertTrue(viewModel.state.value is UiState.Idle)
     }
 
     @Test
@@ -79,9 +68,22 @@ class ReposViewModelTest {
     }
 
     @Test
-    fun searchReposFailure_updatesStateWithError() = runTest {
+    fun searchReposFailure_whenApiReturnsError_updatesStateWithError() = runTest {
+        fakeRepo.shouldReturnError = true
+        viewModel = ReposViewModel(repository = fakeRepo, errorHandler = errorHandler)
+        viewModel.searchRepos("octocat")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val state = viewModel.state.value
+        Assert.assertTrue(state is UiState.Error)
+        Assert.assertEquals("Failed", (state as UiState.Error).message)
+    }
+
+    @Test
+    fun searchReposFailure_afterSuccess_updatesStateWithError() = runTest {
         fakeRepo.shouldReturnError = false
         viewModel = ReposViewModel(repository = fakeRepo, errorHandler = errorHandler)
+        viewModel.searchRepos("octocat")
         testDispatcher.scheduler.advanceUntilIdle()
 
         fakeRepo.shouldReturnError = true

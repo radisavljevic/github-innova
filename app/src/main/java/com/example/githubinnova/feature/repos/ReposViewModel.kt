@@ -18,16 +18,14 @@ class ReposViewModel @Inject constructor(
     private val errorHandler: ErrorHandler,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<UiState<List<Repo>>>(UiState.Loading)
+    private val _state = MutableStateFlow<UiState<List<Repo>>>(UiState.Idle)
     val state = _state.asStateFlow()
 
-    init {
-        loadRepos("octocat")
-    }
-
     fun searchRepos(username: String) {
-        //if (username.isBlank()) return
-
+        if (username.isBlank()) {
+            _state.value = UiState.Idle
+            return
+        }
         viewModelScope.launch {
             _state.value = UiState.Loading
 
@@ -38,17 +36,5 @@ class ReposViewModel @Inject constructor(
                 onFailure = { UiState.Error(errorHandler.handle(it)) }
             )
         }
-    }
-
-    private fun loadRepos(name: String) = viewModelScope.launch {
-        _state.value = UiState.Loading
-
-        repository.getUserRepos(name)
-            .onSuccess {
-                _state.value = UiState.Success(it)
-            }
-            .onFailure {
-                _state.value = UiState.Error(errorHandler.handle(it))
-            }
     }
 }

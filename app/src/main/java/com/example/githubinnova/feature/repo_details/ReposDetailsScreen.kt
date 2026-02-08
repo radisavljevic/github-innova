@@ -35,6 +35,7 @@ fun RepoDetailsScreen(
     }
 
     when (state) {
+        is UiState.Idle,
         is UiState.Loading -> Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center

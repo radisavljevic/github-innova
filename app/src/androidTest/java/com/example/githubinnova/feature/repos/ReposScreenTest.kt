@@ -3,7 +3,11 @@ package com.example.githubinnova.feature.repos
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.text.input.ImeAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.githubinnova.EmptyContentTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -34,7 +38,11 @@ class ReposScreenTest {
             ReposScreen(onRepoClick = {})
         }
 
-        composeRule.onNodeWithText("Search repos by user name").assertIsDisplayed()
+        composeRule.onNodeWithText("Search by GitHub username").assertIsDisplayed()
+        composeRule.onNodeWithText("Enter a GitHub username above to see their repositories").assertIsDisplayed()
+
+        composeRule.onNodeWithTag("search_field").performTextInput("octocat")
+        composeRule.onNodeWithTag("search_field").performImeAction(ImeAction.Search)
 
         composeRule.waitUntil(timeoutMillis = 5_000) {
             composeRule.onAllNodesWithText("TestRepo").fetchSemanticsNodes().isNotEmpty()

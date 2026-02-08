@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun ReposScreen(
@@ -36,6 +38,7 @@ fun ReposScreen(
                 text = text,
                 onTextChange = { text = it },
                 onSearchClick = { viewModel.searchRepos(text) },
+                onClearClick = { viewModel.searchRepos("") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.statusBars)
@@ -49,6 +52,15 @@ fun ReposScreen(
                     .padding(paddingValues)
             ) {
                 when (state) {
+                    is UiState.Idle -> {
+                        Text(
+                            text = "Enter a GitHub username above to see their repositories",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp)
+                        )
+                    }
                     is UiState.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center)
@@ -56,16 +68,31 @@ fun ReposScreen(
                     }
 
                     is UiState.Success<List<Repo>> -> {
-                        RepoList(
-                            repos = (state as UiState.Success<List<Repo>>).data,
-                            onRepoClick = onRepoClick,
-                        )
+                        val data = (state as UiState.Success<List<Repo>>).data
+                        if (data.isEmpty()) {
+                            Text(
+                                text = "No repositories found for this user",
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(32.dp)
+                            )
+                        } else {
+                            RepoList(
+                                repos = data,
+                                onRepoClick = onRepoClick,
+                            )
+                        }
                     }
 
                     is UiState.Error -> {
                         Text(
                             text = (state as UiState.Error).message,
-                            modifier = Modifier.align(Alignment.Center)
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(32.dp)
                         )
                     }
                 }
