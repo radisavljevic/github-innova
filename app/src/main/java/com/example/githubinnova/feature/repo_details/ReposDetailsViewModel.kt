@@ -28,8 +28,11 @@ class RepoDetailsViewModel @Inject constructor(
         val repoResult = repository.getRepoDetails(userName, repoName)
         val tagsResult = repository.getRepoTags(userName, repoName)
 
-        if (repoResult.isSuccess && tagsResult.isSuccess) {
-            _state.value = UiState.Success(repoResult.getOrNull()!! to tagsResult.getOrNull()!!)
+        val repo = repoResult.getOrNull()
+        val tags = tagsResult.getOrNull()
+
+        if (repo != null && tags != null) {
+            _state.value = UiState.Success(repo to tags)
         } else {
             val exception = repoResult.exceptionOrNull() ?: tagsResult.exceptionOrNull()
             _state.value =

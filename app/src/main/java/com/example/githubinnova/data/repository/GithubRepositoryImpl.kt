@@ -15,6 +15,8 @@ class GithubRepositoryImpl @Inject constructor(
     private val api: GithubApi
 ) : GithubRepository {
 
+    // GitHub API token.
+    // Must be provided via local.properties
     private val token = BuildConfig.GITHUB_TOKEN
 
     override suspend fun getUser(name: String): Result<User> =
