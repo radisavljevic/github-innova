@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
+    modifier: Modifier = Modifier,
     text: String,
     onTextChange: (String) -> Unit,
     onSearchClick: () -> Unit,
     onClearClick: () -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 

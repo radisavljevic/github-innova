@@ -61,6 +61,7 @@ fun ReposScreen(
                                 .padding(32.dp)
                         )
                     }
+
                     is UiState.Loading -> {
                         CircularProgressIndicator(
                             modifier = Modifier.align(Alignment.Center)

@@ -5,8 +5,8 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
- class DefaultErrorHandler @Inject constructor(): ErrorHandler {
-     override fun handle(throwable: Throwable): String {
+class DefaultErrorHandler @Inject constructor() : ErrorHandler {
+    override fun handle(throwable: Throwable): String {
         return when (throwable) {
             is IOException -> "Network error"
             is HttpException -> "Server error ${throwable.code()}"
