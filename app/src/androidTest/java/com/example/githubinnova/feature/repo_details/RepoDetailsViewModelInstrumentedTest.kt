@@ -1,7 +1,6 @@
-package com.example.githubinnova
+package com.example.githubinnova.feature.repo_details
 
 import com.example.githubinnova.data.repository.FakeAndroidGithubRepository
-import com.example.githubinnova.feature.repo_details.RepoDetailsViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 

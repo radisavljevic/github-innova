@@ -1,4 +1,4 @@
-package com.example.githubinnova.feature.repo_details
+package com.example.githubinnova.di
 
 import com.example.githubinnova.core.di.AppModule
 import com.example.githubinnova.data.repository.FakeAndroidGithubRepository
