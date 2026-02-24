@@ -2,10 +2,15 @@ package com.example.githubinnova.data.repository
 
 import com.example.githubinnova.domain.model.Commit
 import com.example.githubinnova.domain.model.Repo
+import com.example.githubinnova.domain.model.RepoDetails
 import com.example.githubinnova.domain.model.Tag
 import com.example.githubinnova.domain.model.License
 import com.example.githubinnova.domain.model.User
 import com.example.githubinnova.domain.repository.GithubRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class FakeAndroidGithubRepository @Inject constructor() : GithubRepository {
@@ -48,19 +53,26 @@ class FakeAndroidGithubRepository @Inject constructor() : GithubRepository {
         Tag(name = "v1.1", commit = Commit("sha124"))
     )
 
-    override suspend fun getUser(name: String): Result<User> =
-        if (shouldReturnError) Result.failure(Exception("Failed")) else Result.success(sampleUser)
+    private val reposByUser = MutableStateFlow<Map<String, List<Repo>>>(emptyMap())
+    private val detailsByKey = MutableStateFlow<Map<Pair<String, String>, RepoDetails>>(emptyMap())
 
-    override suspend fun getUserRepos(name: String): Result<List<Repo>> =
-        if (shouldReturnError) Result.failure(Exception("Failed")) else Result.success(
-            listOf(
-                sampleRepo
-            )
-        )
+    override fun observeUserRepos(username: String): Flow<List<Repo>> =
+        reposByUser.map { it[username].orEmpty() }
 
-    override suspend fun getRepoDetails(userName: String, repo: String): Result<Repo> =
-        if (shouldReturnError) Result.failure(Exception("Failed")) else Result.success(sampleRepo)
+    override suspend fun refreshUserRepos(username: String): Result<Unit> =
+        if (shouldReturnError) Result.failure(Exception("Failed"))
+        else {
+            reposByUser.update { it + (username to listOf(sampleRepo)) }
+            Result.success(Unit)
+        }
 
-    override suspend fun getRepoTags(userName: String, repo: String): Result<List<Tag>> =
-        if (shouldReturnError) Result.failure(Exception("Failed")) else Result.success(sampleTags)
+    override fun observeRepoDetails(userName: String, repoName: String): Flow<RepoDetails?> =
+        detailsByKey.map { it[userName to repoName] }
+
+    override suspend fun refreshRepoDetails(userName: String, repoName: String): Result<Unit> =
+        if (shouldReturnError) Result.failure(Exception("Failed"))
+        else {
+            detailsByKey.update { it + ((userName to repoName) to RepoDetails(sampleRepo, sampleTags)) }
+            Result.success(Unit)
+        }
 }
